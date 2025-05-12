@@ -14,11 +14,11 @@ def extract():
     return render_template("extract.html")
 
 @app.route("/product/<product_id>")
-def product(product_id):
+def product(product_id = "N/A"):
     return render_template("product.html", product_id=product_id)
 
 @app.route("/charts/<product_id>")
-def charts():
+def charts(product_id = "N/A"):
     return render_template("charts.html", product_id=product_id)
 
 @app.route("/products")
