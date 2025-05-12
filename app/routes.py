@@ -22,7 +22,7 @@ def charts():
     return render_template("charts.html", product_id=product_id)
 
 @app.route("/products")
-def index():
+def products():
     return render_template("products.html")
     
 @app.route("/about")
