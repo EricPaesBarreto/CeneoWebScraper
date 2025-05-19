@@ -67,9 +67,11 @@ class Product:
         plt.xlabel("Score")
         plt.ylabel("Number of opinions")
         no_opinions = len(self.opinions)
-        plt.title("Number of opinions about {product_id} by their respective scores.\nTotal number of opinions: {no_opinions}")
+        plt.title("Number of opinions about {self.product_id} by their respective scores.\nTotal number of opinions: {no_opinions}")
         plt.xticks(rotation=0)
         plt.savefig(f"./bar_charts/{self.product_id}.png")
+
+        plt.close()
 
 
 class Opinion:
