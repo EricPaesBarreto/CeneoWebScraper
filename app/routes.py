@@ -1,6 +1,5 @@
-from flask import render_template
 from app import app
-
+from flask import Flask, render_template
     # two methods of obtaining data from the client
     # get : data is hidden
     # post : data is visible
