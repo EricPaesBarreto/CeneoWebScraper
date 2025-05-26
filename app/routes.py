@@ -1,4 +1,5 @@
 from app import app
+from app.models import Product
 from app.forms import ProductIdForm
 from flask import Flask, render_template, redirect, url_for, request
     # two methods of obtaining data from the client

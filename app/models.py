@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 from config import headers
 
 class Product:
-    def __init__(self, product_id, product_name, opinions, product_statistics, ):
+    def __init__(self, product_id, product_name="", opinions=[], product_statistics={}):
         self.product_id = product_id
         self.product_name()
         self.opinions = opinions
