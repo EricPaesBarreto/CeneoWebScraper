@@ -1,16 +1,27 @@
 from app import app
-from flask import Flask, render_template
+from app.forms import ProductIdForm
+from flask import Flask, render_template, redirect, url_for, request
     # two methods of obtaining data from the client
-    # get : data is hidden
-    # post : data is visible
+    # get : data is visible
+    # post : data is hidden
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/extract/")
+@app.route("/extract")
+def display_extract():
+    form = ProductIdForm()
+    return render_template("extract.html", form=form)
+
+@app.route("/extract", methods=["POST"])
 def extract():
-    return render_template("extract.html")
+    form = ProductIdForm(request.form)
+    if form.validate():
+        product_id = form.product_id.data
+        return redirect(url_for('product', product_id=product_id))
+    else:
+        return render_template("extract.html", form=form)
 
 @app.route("/product/<product_id>")
 def product(product_id = "N/A"):

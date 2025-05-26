@@ -1,4 +1,14 @@
 {% extends 'base.html' %}
+
+{% block title %}Extraction of Opinions{% endblock %}
+
 {% block content %}
-<p>Extract page</p>
+{% if form.product_id.errors %}
+    <ul class="errors">{% for error in form.product_id.errors %}<li>{{error}}</li>{% endfor %}</ul>
+{% endif %}
+    <form action="" method="post" novalidate>
+        {{form.product_id.label}}
+        {{form.product_id}}
+        {{form.submit}}
+    </form>
 {% endblock %}
