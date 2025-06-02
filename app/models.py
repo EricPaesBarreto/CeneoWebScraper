@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from matplotlib import pyplot as plt
 # internal
 from config import headers
+from utils import extract_data, translate_data
 
 class Product:
     def __init__(self, product_id, product_name="", opinions=[], product_statistics={}):
@@ -73,6 +74,44 @@ class Product:
 
         plt.close()
 
+    def extract_opinion():
+        all_opinions = []
+        while url is not None:
+            response = requests.get(url, headers = headers)
+            if response.status_code == 200:
+                page_doc = BeautifulSoup(response.text, 'html.parser')
+                opinions = page_doc.select("div.js_product-review:not(.user-post--highlight)")
+                for opinion in opinions:
+                    single_opinion = Opinion()
+                    single_opinion.extract(opinion)
+
+                    # optional translation
+                    try:
+                        single_opinion['content_en'] = translate_data(single_opinion['content_pl'])
+                    except Exception:
+                        single_opinion['content_en'] = None
+                    try:
+                        single_opinion['pros_en'] = [translate_data(pro_pl) for pro_pl in single_opinion['pros_pl']]
+                    except Exception:
+                        single_opinion['pros_en'] = None
+                    try:
+                        single_opinion['cons_en'] = [translate_data(con_pl) for con_pl in single_opinion['cons_pl']]
+                    except Exception:
+                        single_opinion['cons_en'] = None
+                    
+                    single_opinion['recommendation'] = True if single_opinion['recommendation'] == "Polecam" else False if single_opinion['recommendation']  == "Nie polecam" else None
+                    single_opinion['score'] = float(single_opinion['score'].split('/')[0].replace(",","."))
+                    # single_opinion['date_published'] = datetime.datetime.fromisoformat(single_opinion['date_published'])
+                    # single_opinion['date_purchased'] = datetime.datetime.fromisoformat(single_opinion['date_purchased']) if single_opinion['date_purchased'] else None
+                    single_opinion['thumbs_up'] = int(single_opinion['thumbs_up'])
+                    single_opinion['thumbs__down'] = int(single_opinion['thumbs_down'])
+
+                    all_opinions.append(single_opinion)
+                try:
+                    url = "https://www.ceneo.pl"+page_doc.select_one("a.pagination__next")["href"]
+                except TypeError:
+                    url = None
+
 
 class Opinion:
     selectors = {
@@ -86,21 +125,27 @@ class Opinion:
         'thumbs_up': ("button.vote-yes", "data-total-vote",),
         'thumbs_down': ("button.vote-no", "data-total-vote",),
         'date_published': ("span.user-post__published > time:nth-child(1)", "datetime"),
-        'date_purchased': ("span.user-post__published > time:nth-child(2)", "datetime")
+        'date_purchased': ("span.user-post__published > time:nth-child(2)", "datetime"),
+        'content_en': "",
+        'pros_en' : (),
+        'cons_en' : ()
     }
 
-    def __init__(self, opinion_id, author, recommendation, score, content, pros, cons, thumbs_up, thumbs_down, date_published, date_purchased):
+    def __init__(self, opinion_id="", author="", recommendation=False, score=0, content_pl="", pros_pl=[], cons_pl=[], thumbs_up=0, thumbs_down=0, date_published=None, date_purchased=None, content_en="", pros_en=[], cons_en=[]):
         self.opinion_id = opinion_id
         self.author = author
         self.recommendation = recommendation
         self.score = score
-        self.content = content
-        self.pros = pros
-        self.cons = cons
+        self.content_pl = content_pl
+        self.pros_pl = pros_pl
+        self.cons_pl = cons_pl
         self.thumbs_up = thumbs_up
         self.thumbs_down = thumbs_down
         self.date_published = date_published
         self.date_purchased = date_purchased
+        self.content_en = content_en
+        self.pros_en = pros_en
+        self.cons_en = cons_en
 
     def __str__(self):
         return "\n".join([f"{key}: {getattr(self,key)}" for key in self.selectors.keys()])
@@ -110,3 +155,13 @@ class Opinion:
     
     def convert_to_dictionary(self):
             return {key: getattr(self,key) for key in self.selectors.keys()}
+
+    def extract(self, opinion):
+        for key, values in self.selecors.items():
+            setattr(self, key, extract_data(opinion, *values))
+    
+    def translate(self):
+        self.content_en = translate_data(self.content_pl)
+        self.pros_en = [translate_data(pros) for pros in self.pros_pl]
+        self.cons_en = [translate_data(cons) for cons in self.cons_pl]
+        
