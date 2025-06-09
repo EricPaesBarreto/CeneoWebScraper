@@ -25,7 +25,7 @@ def translate_data(text, source = 'pl', target = 'en'):
     return GoogleTranslator(source, target).translate(text)
 
 def create_if_not_exists(path):
-    if not os.path.exists(path):
+    if os.path.exists(path) is not True:
             os.mkdir(path)
 
 def create_if_not_exists_multiple(paths):

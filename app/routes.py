@@ -26,7 +26,7 @@ def extract():
         product.calculate_statistics()
         product.generate_charts()
         product.save_opinions()
-        products.save_info()
+        product.save_info()
         return redirect(url_for('product', product_id=product_id))
     else:
         return render_template("extract.html", form=form)
