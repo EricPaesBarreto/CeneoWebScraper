@@ -4,7 +4,7 @@
 {% block content %}
 {% for product_id in product_ids %}
     <ul class="list-group list-group-horizontal-md">
-        <a href="/product/{{ product_id }}" class="list-group-item list-group-item-action flex-fill" aria-current="true">
+        <a href="/product/{{ product_id }}" class="list-group-item list-group-item-action" aria-current="true">
             {{ product_id }}
         </a>
         <li class="list-group-item flex-fill">
@@ -19,10 +19,18 @@
         <li class="list-group-item flex-fill">
             <p>/average score</p>
         </li>
-        <li class="list-group-item">
-            <a>download .csv</a>
-            <a>download .xlsx</a>
-            <a>download .json</a>
+        <li class="list-group-item flex-fill">
+            <div class="col-6">
+                <div class="row">
+                    <a href="#">download .csv</a>
+                </div>
+                <div class="row">
+                    <a href="#">download .xlsx</a>
+                </div>
+                <div class="row">
+                    <a href="#">download .json</a>
+                </div>
+            </div>
         </li>
     </ul>
     
