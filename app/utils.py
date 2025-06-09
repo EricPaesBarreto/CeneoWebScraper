@@ -31,3 +31,8 @@ def create_if_not_exists(path):
 def create_if_not_exists_multiple(paths):
     for path in paths:
         create_if_not_exists(path)
+
+
+def get_all_products():
+    if os.path.exists('./app/data/products'):
+        return [file.split('.')[0] for file in os.listdir('./app/data/products')]

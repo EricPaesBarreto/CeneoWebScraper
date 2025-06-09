@@ -1,4 +1,30 @@
 {% extends 'base.html' %}
+{% block title %} Products {% endblock %}
+
 {% block content %}
-<p>Products page</p>
+{% for product_id in product_ids %}
+    <ul class="list-group list-group-horizontal-md">
+        <a href="/product/{{ product_id }}" class="list-group-item list-group-item-action flex-fill" aria-current="true">
+            {{ product_id }}
+        </a>
+        <li class="list-group-item flex-fill">
+            <p>/no. opinions</p>
+        </li>
+        <li class="list-group-item flex-fill">
+            <p>/no. disadvantages</p>
+        </li>
+        <li class="list-group-item flex-fill">
+            <p>/no. advantages</p>
+        </li>
+        <li class="list-group-item flex-fill">
+            <p>/average score</p>
+        </li>
+        <li class="list-group-item">
+            <a>download .csv</a>
+            <a>download .xlsx</a>
+            <a>download .json</a>
+        </li>
+    </ul>
+    
+{% endfor %}
 {% endblock %}
