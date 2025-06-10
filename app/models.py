@@ -99,6 +99,8 @@ class Product:
                     url = "https://www.ceneo.pl"+extract_data(page_doc,"a.pagination__next")["href"]
                 except TypeError:
                     url = None
+            else:
+                break
 
     def save_opinions(self):
         create_if_not_exists_multiple(('./app/data', './app/data/opinions'))

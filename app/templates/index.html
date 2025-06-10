@@ -3,10 +3,45 @@
 {% block title %} Project Description {% endblock %}
 
 {% block content %}
-<ul>
-    <li>Purpose of the application</li>
-    <li>Description of the application</li>
-    <li>Libraries/packages used in the application</li>
-    <li>Approaches applied while developing the application</li>
+<ul class="list-group">
+    <li class="list-group-item">
+        <h4>
+            Purpose of the application
+        </h4>
+        <p>
+            The purpose of this application is to scrape data from the popular online-retail store <a href="https://www.ceneo.pl">ceneo.pl</a> and provide interesting statistics for products available on the site.
+        </p>
+        <p>
+            This includes graphs, as well as some basic descriptive statistics. Another purpose of this project was to learn the basics of web development using the Flask framework amongst other tools, and familiarise myself with how web-applications work.
+        </p>
+    </li>
+    <li class="list-group-item">
+        <h4>
+            Description of the application
+        </h4>
+        <p>
+            The application works in a very simple way, firstly, product data must be extracted, during this process statistical data and graphs are generated. You may access pre-extracted products on the <a href="/products">products page</a>.
+        </p>
+        <p>
+            Extraction of products may be done on the <a href="/extract">extraction page</a>, for this to properly work, you must input a valid product ID from the ceneo website. You can get a Product id by checking the url of the product on <a href="https://www.ceneo.pl">ceneo.pl</a>.
+        </p>
+    </li>
+    <li class="list-group-item">
+        <h4>
+            Libraries/packages used in the application
+        </h4>
+        {{ requirements }}
+    </li>
+    <li class="list-group-item">
+        <h4>
+            Approaches applied while developing the application
+        </h4>
+        <p>
+            This program was made with an object oriented approach to dealing with the representation of products and opinions, with a mix of typical procedural programming.
+        </p>
+        <p>
+            A particularly large focus for me was making the code as human-readable and understandable as possible, without sacrificing performance too much.
+        </p>
+    </li>
 </ul>
 {% endblock %}

@@ -1,8 +1,8 @@
 from app import app
 from app.models import Product
 from app.forms import ProductIdForm
-from app.utils import get_all_products_info, get_file_for_download
 from flask import Flask, render_template, redirect, url_for, request, send_file
+from app.utils import get_all_products_info, get_file_for_download, get_dependencies_as_string
 
     # two methods of obtaining data from the client
     # get : data is visible
@@ -10,7 +10,7 @@ from flask import Flask, render_template, redirect, url_for, request, send_file
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", requirements=get_dependencies_as_string())
 
 @app.route("/extract")
 def display_extract():
@@ -49,7 +49,7 @@ def products():
 def about():
     return render_template("about.html")
 
-@app.route("/download/<file_format>/<product_id>")
-def download_file(file_format, product_id):
-    path, filename = get_file_for_download(product_id, file_format)
+@app.route("/download/<model>/<file_format>/<product_id>")
+def download_file(model, file_format, product_id):
+    path, filename = get_file_for_download(model, file_format, product_id)
     return send_file(path, as_attachment=True, download_name=filename)
