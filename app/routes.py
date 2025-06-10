@@ -1,7 +1,7 @@
 from app import app
 from app.models import Product
 from app.forms import ProductIdForm
-from app.utils import get_all_products
+from app.utils import get_all_products_info
 from flask import Flask, render_template, redirect, url_for, request
 
     # two methods of obtaining data from the client
@@ -43,7 +43,7 @@ def charts(product_id = "N/A"):
 
 @app.route("/products")
 def products():
-    return render_template("products.html", product_ids = get_all_products())
+    return render_template("products.html", products = get_all_products_info())
     
 @app.route("/about")
 def about():

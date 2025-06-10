@@ -2,37 +2,44 @@
 {% block title %} Products {% endblock %}
 
 {% block content %}
-{% for product_id in product_ids %}
+{% if products != None %}
+{% for product in products %}
+{% if product != None %}
     <ul class="list-group list-group-horizontal-md">
-        <a href="/product/{{ product_id }}" class="list-group-item list-group-item-action" aria-current="true">
-            {{ product_id }}
-        </a>
         <li class="list-group-item flex-fill">
-            <p>/no. opinions</p>
+            <a href="/product/{{ product['product_id'] }}" class="list-group-item list-group-item-action" aria-current="true">
+                {{ product["product_name"] }}
+            </a>
         </li>
         <li class="list-group-item flex-fill">
-            <p>/no. disadvantages</p>
+            <p>Opinions</p>
+            {{ product['product_statistics']['opinions_count'] }}
         </li>
         <li class="list-group-item flex-fill">
-            <p>/no. advantages</p>
+            <p>Disadvantages</p>
+            {{ product['product_statistics']['cons_count'] }}
         </li>
         <li class="list-group-item flex-fill">
-            <p>/average score</p>
+            <p>Advantages</p>
+            {{ product['product_statistics']['pros_count'] }}
         </li>
         <li class="list-group-item flex-fill">
-            <div class="col-6">
-                <div class="row">
-                    <a href="#">download .csv</a>
-                </div>
-                <div class="row">
-                    <a href="#">download .xlsx</a>
-                </div>
-                <div class="row">
-                    <a href="#">download .json</a>
-                </div>
-            </div>
+            <p>Average score</p>
+            {{ product['product_statistics']['average_score'] }}
+        </li>
+        <li class="list-group-item flex-fill">
+            <p>Download:</p>
+            <a href="#">.csv</a>
+            <a href="#">.xlsx</a>
+            <a href="#">.json</a>
         </li>
     </ul>
-    
+{% endif %}
 {% endfor %}
+{% else %}
+<div class="alert alert-secondary" role="alert">
+    Note: There are no products stored on the site!</br>
+    You can extract a product on <a href="/extract">this page</a>.
+</div>
+{% endif %}
 {% endblock %}

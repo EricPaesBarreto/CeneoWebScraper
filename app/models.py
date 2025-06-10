@@ -19,6 +19,7 @@ class Product:
         self.product_name = product_name
         self.opinions = opinions
         self.product_statistics = product_statistics
+        
     
     def __str__(self):
         return f"product_id: {self.product_id}, product_name: {self.product_name}\nproduct_statistics:"+json.dumps(self.product_statistics, indent=4,ensure_ascii=False)+"\nopinions:"+"\n\n".join([str(opinion) for opinion in self.opinions])
@@ -103,7 +104,6 @@ class Product:
         create_if_not_exists_multiple(('./app/data', './app/data/opinions'))
         with open(f"./app/data/opinions/{self.product_id}.json", "w", encoding="UTF-8") as json_file:
             json.dump(self.opinions_to_dict(), json_file, indent=4, ensure_ascii=False)
-
 
     def save_info(self):
         create_if_not_exists_multiple(('./app/data', './app/data/products'))
