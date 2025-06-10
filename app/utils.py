@@ -36,12 +36,15 @@ def create_if_not_exists_multiple(paths):
 
 def get_all_products_info():
     if os.path.exists('./app/data/products'):
-        return [
+        products_info = [
             product for product in (
                 read_product_info_from_json(os.path.join('./app/data/products', file))
                 for file in os.listdir('./app/data/products')
-            ) if product is not None
+             ) if product is not None
         ]
+    if len(products_info) > 0:
+        return products_info
+    # if there are no products
     return None
 
 def read_product_info_from_json(path):
