@@ -1,5 +1,6 @@
 import os
 import json
+import pandas as pd
 from deep_translator import GoogleTranslator
 
 
@@ -28,7 +29,7 @@ def translate_data(text, source = 'pl', target = 'en'):
 
 def create_if_not_exists(path):
     if os.path.exists(path) is not True:
-            os.mkdir(path)
+            os.makedirs(path)
 
 def create_if_not_exists_multiple(paths):
     for path in paths:
@@ -52,3 +53,38 @@ def read_product_info_from_json(path):
         with open(path, "r", encoding="UTF-8") as json_file:
             return json.load(json_file)
     return None
+
+def json_to_data_frame(path):
+    with open(path, 'r', encoding="UTF-8") as json_file:
+        return pd.json_normalize(json.load(json_file))
+    
+def get_file_for_download(product_id, file_format):
+    # determine current path to prevent errors
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(base_path, "data")
+
+    # folder for converted files
+    converted_path = os.path.join(data_path, "converted_files")
+    csv_path = os.path.join(converted_path, "csv")
+    xlsx_path = os.path.join(converted_path, "xlsx")
+
+    # create folders if missing
+    create_if_not_exists_multiple([data_path, converted_path, csv_path, xlsx_path])
+
+    # default json path
+    json_path = os.path.join(data_path, "products", f"{product_id}.json")
+
+    # change based on file_type
+    match file_format:
+        case "json":
+            return json_path, f"{product_id}.json"
+        case "csv":
+            csv_file = os.path.join(csv_path, f"{product_id}.csv")
+            data = read_product_info_from_json(json_path)
+            pd.DataFrame([data]).to_csv(csv_file, index=False)
+            return csv_file, f"{product_id}.csv"
+        case "xlsx":
+            xlsx_file = os.path.join(xlsx_path, f"{product_id}.xlsx")
+            data = read_product_info_from_json(json_path)
+            pd.DataFrame([data]).to_excel(xlsx_file, index=False)
+            return xlsx_file, f"{product_id}.xlsx"

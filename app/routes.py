@@ -1,8 +1,8 @@
 from app import app
 from app.models import Product
 from app.forms import ProductIdForm
-from app.utils import get_all_products_info
-from flask import Flask, render_template, redirect, url_for, request
+from app.utils import get_all_products_info, get_file_for_download
+from flask import Flask, render_template, redirect, url_for, request, send_file
 
     # two methods of obtaining data from the client
     # get : data is visible
@@ -48,3 +48,8 @@ def products():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+@app.route("/download/<file_format>/<product_id>")
+def download_file(file_format, product_id):
+    path, filename = get_file_for_download(product_id, file_format)
+    return send_file(path, as_attachment=True, download_name=filename)

@@ -29,9 +29,9 @@
                 </li>
                 <li class="list-group-item flex-fill">
                     <p>Download:</p>
-                    <a href="#">.csv</a>
-                    <a href="#">.xlsx</a>
-                    <a href="#">.json</a>
+                    <a href="/download/csv/{{ product['product_id'] }}">.csv</a>
+                    <a href="/download/xlsx/{{ product['product_id'] }}">.xlsx</a>
+                    <a href="/download/json/{{ product['product_id'] }}">.json</a>
                 </li>
             </ul>
         {% endif %}
