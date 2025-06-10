@@ -2,44 +2,46 @@
 {% block title %} Products {% endblock %}
 
 {% block content %}
-{% if products != None %}
-    {% for product in products %}
-        {% if product != None %}
-            <ul class="list-group list-group-horizontal-md">
-                <li class="list-group-item flex-fill">
-                    <a href="/product/{{ product['product_id'] }}" class="list-group-item list-group-item-action" aria-current="true">
-                        {{ product["product_name"] }}
-                    </a>
-                </li>
-                <li class="list-group-item flex-fill">
-                    <p>Opinions</p>
-                    {{ product['product_statistics']['opinions_count'] }}
-                </li>
-                <li class="list-group-item flex-fill">
-                    <p>Disadvantages</p>
-                    {{ product['product_statistics']['cons_count'] }}
-                </li>
-                <li class="list-group-item flex-fill">
-                    <p>Advantages</p>
-                    {{ product['product_statistics']['pros_count'] }}
-                </li>
-                <li class="list-group-item flex-fill">
-                    <p>Average score</p>
-                    {{ product['product_statistics']['average_score'] }}
-                </li>
-                <li class="list-group-item flex-fill">
-                    <p>Download:</p>
-                    <a href="/download/csv/{{ product['product_id'] }}">.csv</a>
-                    <a href="/download/xlsx/{{ product['product_id'] }}">.xlsx</a>
-                    <a href="/download/json/{{ product['product_id'] }}">.json</a>
-                </li>
-            </ul>
-        {% endif %}
-    {% endfor %}
-{% else %}
-<div class="alert alert-secondary" role="alert">
-    Note: There are no products stored on the site!</br>
-    You can extract a product on <a href="/extract">this page</a>.
+<div class="container">
+    {% if products %}
+        {% for product in products %}
+            {% if product %}
+                <div class="row border rounded py-2 mb-2 align-items-center">
+                    <div class="col">
+                        <a href="/product/{{ product['product_id'] }}" class="text-decoration-none fw-bold">
+                            {{ product["product_name"] }}
+                        </a>
+                    </div>
+                    <div class="col">
+                        <p class="mb-1">Opinions</p>
+                        {{ product['product_statistics']['opinions_count'] }}
+                    </div>
+                    <div class="col">
+                        <p class="mb-1">Disadvantages</p>
+                        {{ product['product_statistics']['cons_count'] }}
+                    </div>
+                    <div class="col">
+                        <p class="mb-1">Advantages</p>
+                        {{ product['product_statistics']['pros_count'] }}
+                    </div>
+                    <div class="col">
+                        <p class="mb-1">Average score</p>
+                        {{ product['product_statistics']['average_score'] | round(2) }}
+                    </div>
+                    <div class="col">
+                        <p class="mb-1">Download:</p>
+                        <a href="/download/csv/{{ product['product_id'] }}">.csv</a>
+                        <a href="/download/xlsx/{{ product['product_id'] }}">.xlsx</a>
+                        <a href="/download/json/{{ product['product_id'] }}">.json</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-secondary" role="alert">
+            Note: There are no products stored on the site!</br>
+            You can extract a product on <a href="/extract">this page</a>.
+        </div>
+    {% endif %}
 </div>
-{% endif %}
 {% endblock %}
