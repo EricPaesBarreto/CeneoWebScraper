@@ -8,7 +8,7 @@ __pycache__
 # config
 config.py
 
-# generated files:
+# generated files
 app/static/bar_charts/
 app/static/opinions/
 

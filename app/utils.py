@@ -43,7 +43,7 @@ def get_all_products_info():
     if os.path.exists('./app/data/products'):
         products_info = [
             product for product in (
-                read_product_info_from_json(os.path.join('./app/data/products', file))
+                read_product_info_from_json(path=os.path.join('./app/data/products', file))
                 for file in os.listdir('./app/data/products')
              ) if product is not None
         ]
@@ -52,10 +52,20 @@ def get_all_products_info():
     # if there are no products
     return None
 
-def read_product_info_from_json(path):
-    if os.path.exists(path):
-        with open(path, "r", encoding="UTF-8") as json_file:
-            return json.load(json_file)
+def read_product_info_from_json(path=None, product_id=None):
+    if path:
+        if os.path.exists(path):
+            with open(path, "r", encoding="UTF-8") as json_file:
+                return json.load(json_file)
+    elif product_id:
+        # path = None, set path
+        path = os.path.join(get_base_path(), 'products', product_id)
+
+        if os.path.exists(path):
+            with open(path, "r", encoding="UTF-8") as json_file:
+                return json.load(json_file)
+
+    # None, None
     return None
 
 def json_to_data_frame(path):
@@ -89,12 +99,12 @@ def get_file_for_download( model, file_format, product_id):
             return json_path, f"{product_id}.json"
         case "csv":
             csv_file = os.path.join(csv_path, f"{product_id}.csv")
-            data = read_product_info_from_json(json_path)
+            data = read_product_info_from_json(path=json_path)
             pd.DataFrame([data]).to_csv(csv_file, index=False)
             return csv_file, f"{product_id}.csv"
         case "xlsx":
             xlsx_file = os.path.join(xlsx_path, f"{product_id}.xlsx")
-            data = read_product_info_from_json(json_path)
+            data = read_product_info_from_json(path=json_path)
             pd.DataFrame([data]).to_excel(xlsx_file, index=False)
             return xlsx_file, f"{product_id}.xlsx"
         
@@ -107,3 +117,23 @@ def get_dependencies_as_string():
             return ', '.join([r.split('==')[0] for r in requirements.readlines()])
     else:
         return ['Requirements not found.']
+
+def get_all_opinions_info(product_id):
+    # get the path of the opinions for the product
+    base_path = os.path.join(get_base_path(), 'opinions')
+
+    # get the path of the opinion
+    path = os.path.join(base_path, product_id,'.json')
+
+    opinions_info = read_opinion_info_from_json(path)
+    if opinions_info:
+        if len(opinions_info) > 0:
+            return opinions_info
+    # if there are no opinions
+    return None
+
+def read_opinion_info_from_json(path):
+    if os.path.exists(path):
+        with open(path, "r", encoding="UTF-8") as json_file:
+            return json.load(json_file)
+    return None

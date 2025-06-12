@@ -2,7 +2,7 @@ from app import app
 from app.models import Product
 from app.forms import ProductIdForm
 from flask import Flask, render_template, redirect, url_for, request, send_file
-from app.utils import get_all_products_info, get_file_for_download, get_dependencies_as_string
+from app.utils import get_all_products_info, get_file_for_download, get_dependencies_as_string, get_all_opinions_info, read_product_info_from_json
 
     # two methods of obtaining data from the client
     # get : data is visible
@@ -35,7 +35,8 @@ def extract():
 
 @app.route("/product/<product_id>")
 def product(product_id = "N/A"):
-    return render_template("product.html", product_id=product_id)
+    return render_template("product.html", opinions=get_all_opinions_info(product_id=product_id), 
+                            product=read_product_info_from_json(product_id=product_id))
 
 @app.route("/charts/<product_id>")
 def charts(product_id = "N/A"):
