@@ -35,7 +35,7 @@ def extract():
 
 @app.route("/product/<product_id>")
 def product(product_id = "N/A"):
-    return render_template("product.html", opinions=get_all_opinions_info(product_id=product_id), 
+    return render_template("product.html", product_id=product_id, opinions=get_all_opinions_info(product_id=product_id), 
                             product=read_product_info_from_json(product_id=product_id))
 
 @app.route("/charts/<product_id>")

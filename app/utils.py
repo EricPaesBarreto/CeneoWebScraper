@@ -28,7 +28,7 @@ def translate_data(text, source = 'pl', target = 'en'):
     try:
         GoogleTranslator(source, target).translate(text)
     except Exception:
-        return "Translation Error"
+        return None
     # sometimes the number of requests maxes out or some other issue occurs
 
 def create_if_not_exists(path):
@@ -47,8 +47,10 @@ def get_all_products_info():
                 for file in os.listdir('./app/data/products')
              ) if product is not None
         ]
-    if len(products_info) > 0:
-        return products_info
+
+        if len(products_info) > 0:
+            return products_info
+        
     # if there are no products
     return None
 
@@ -58,9 +60,9 @@ def read_product_info_from_json(path=None, product_id=None):
             with open(path, "r", encoding="UTF-8") as json_file:
                 return json.load(json_file)
     elif product_id:
-        # path = None, set path
-        path = os.path.join(get_base_path(), 'products', product_id)
-
+        # path = None, set path (used for routing /products/product_id)
+        path = os.path.join(get_base_path(), 'data', 'products', product_id) + '.json'
+        print(f"checking for product in: {path}")
         if os.path.exists(path):
             with open(path, "r", encoding="UTF-8") as json_file:
                 return json.load(json_file)
@@ -120,10 +122,10 @@ def get_dependencies_as_string():
 
 def get_all_opinions_info(product_id):
     # get the path of the opinions for the product
-    base_path = os.path.join(get_base_path(), 'opinions')
+    base_path = os.path.join(get_base_path(), 'data', 'opinions')
 
-    # get the path of the opinion
-    path = os.path.join(base_path, product_id,'.json')
+    # get the path of the opinions
+    path = os.path.join(base_path, product_id) + '.json'
 
     opinions_info = read_opinion_info_from_json(path)
     if opinions_info:
@@ -133,6 +135,7 @@ def get_all_opinions_info(product_id):
     return None
 
 def read_opinion_info_from_json(path):
+    print(f"attempting file read at {path}")
     if os.path.exists(path):
         with open(path, "r", encoding="UTF-8") as json_file:
             return json.load(json_file)

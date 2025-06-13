@@ -2,11 +2,52 @@
 {% block title %} {{product['product_name']}} {% endblock %}
 
 {% block content %}
-{% for opinion in opinions %}
-    <div class="container">
-        <div class="">
-            
-        </div>
-    </div>>
-{% endfor %}
+<div class="container">
+    {% if opinions %}
+    <div class="row border rounded py-2 mb-2 align-items-center">
+        <a href="/charts/{{ product_id }}">Charts for this product</a>
+    </div>
+        {% for opinion in opinions %}
+            {% if opinion %}
+                <div class="row border rounded py-2 mb-2 align-items-center">
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-1">Author: {{ opinion['author'] }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-1">Score: {{ opinion['score'] }}</p>
+                        </div>
+                        {% if opinion.get('date_purchased') %}
+                        <div class="col">
+                            <p class="mb-1">Purchased: {{ opinion['date_purchased'].split(' ')[0] }}</p>
+                        </div>
+                        {% endif %}
+                        {% if opinion.get('date_published') %}
+                        <div class="col">
+                            <p class="mb-1">Published: {{ opinion['date_published'].split(' ')[0] }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <p class="mb-1">"{{ opinion['content_pl'] }}"</p>
+                    </div>
+                    
+                    {% if opinion['content_en'] %}
+                        <p class="mb-1">Translation (English):</p>
+                        <div class="row">
+                            <p class="mb-1">"{{ opinion['content_en'] }}"</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+            <div class="alert alert-secondary" role="alert">
+                Note: There are no opinions stored for this product!</br>
+                You can browse other products on <a href="/products">this page</a>.</br>
+                You can extract a product on <a href="/extract">this page</a>.
+            </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -58,31 +58,47 @@ class Product:
         self.product_statistics["scores"] = opinions.score.value_counts().reindex(list(np.arange(0.5,5.5,0.5)), fill_value=0).to_dict()
 
     def generate_charts(self):
-        create_if_not_exists_multiple(('./app/static/opinions','./app/static/bar_charts'))
-        recomendations = pd.Series(self.product_statistics["recommendations"], index=self.product_statistics['recommendations'].keys())
-
-        recomendations.plot.pie(
-            label = "",
-            labels = ["Recommend", "Not recommend", "No opinion"], # same order as stated in the reindex order statement above
-            colors = ["forestgreen", "crimson", "steelblue"], # colours
-            autopct = lambda r: f"{r:.1f}%" if r > 0 else "" # function that returns a percentage value only if greate than 0%, (exclude) from chart
+        create_if_not_exists_multiple(('./app/static/opinions', './app/static/bar_charts'))
+        recomendations = pd.Series(
+            self.product_statistics["recommendations"],
+            index=self.product_statistics["recommendations"].keys()
         )
-        plt.title(f"recommendations for product {self.product_id}")
-        plt.savefig(fname=f"./app/static/opinions/{self.product_id}.png")
-        
+        recomendations.plot.pie(
+            label="",
+            labels=["Recommend", "Not recommend", "No opinion"],
+            colors=["forestgreen", "crimson", "steelblue"],
+            autopct=lambda r: f"{r:.1f}%" if r > 0 else ""
+        )
+        plt.title(
+            f"Recommendations for product: {self.product_id}\n"
+            f"Total number of opinions: {self.product_statistics['opinions_count']}"
+        )
+        plt.savefig(f"./app/static/opinions/{self.product_id}.png")
+        plt.close()
+
+        plt.figure(figsize=(7,6))
         scores = pd.Series(self.product_statistics["scores"])
         ax = scores.plot.bar(
-            color = ["forestgreen" if s > 3.5 else "crimson" if s < 3 else "steelblue" for s in scores.index]
+            color=[
+                "forestgreen" if s > 3.5 else
+                "crimson"     if s < 3   else
+                "steelblue"
+                for s in scores.index
+            ]
         )
         plt.bar_label(container=ax.containers[0])
         plt.xlabel("Score")
         plt.ylabel("Number of opinions")
         no_opinions = len(self.opinions)
-        plt.title("Number of opinions about {self.product_id} by their respective scores.\nTotal number of opinions: {no_opinions}")
+        plt.title(
+            f"Number of opinions about product {self.product_id}\n"
+            f"by their respective scores\n"
+            f"Total number of opinions: {no_opinions}"
+        )
         plt.xticks(rotation=0)
-        plt.savefig(fname=f"./app/static/bar_charts/{self.product_id}.png")
-
+        plt.savefig(f"./app/static/bar_charts/{self.product_id}.png")
         plt.close()
+
 
     def extract_opinions(self):
         url = self.get_link()

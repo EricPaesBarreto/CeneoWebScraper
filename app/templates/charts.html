@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block title %} {{ product_id }} {% endblock %}
+
 {% block content %}
-<p>Charts page</p>
+    <img src="{{ url_for('static', filename='bar_charts/' ~ product_id ~ '.png') }}" alt="bar chart">
+    <img src="{{ url_for('static', filename='opinions/' ~ product_id ~ '.png') }}" alt="opinions chart">
 {% endblock %}
